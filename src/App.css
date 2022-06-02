@@ -36,3 +36,15 @@
     transform: rotate(360deg);
   }
 }
+
+.cal-label{
+  padding: 10px;
+  font-size: 20px;
+}
+
+.react-datetime-picker__wrapper{
+  font-size: 20px !important;
+  padding: 10px 15px !important;
+  border-radius: 5px !important;
+  border: 1px solid #ccc !important;
+}
