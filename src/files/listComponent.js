@@ -24,18 +24,19 @@ import DateTimePicker from 'react-datetime-picker';
 
 function ListComponent(props) {
     // localStorage.setItem("archit-todo-tasks",JSON.stringify(listData));
-    const {tasks,folders,setTasks,setFolders,expanded,handleChange,dateFormat} = useContext(AppContext);
+    const {count,setCount,tasks,folders,setTasks,setFolders,expanded,handleChange,dateFormat} = useContext(AppContext);
     const [openModal,setOpenModal] = useState(false);
     const [openModalID,setOpenModalID] = useState(-1);
     const [date,setDate] = useState(new Date());
     const [folderList,setFoldersList] = useState([folders[0]]);
     const [taskTitle,setTaskTitle] = useState("");
     const [taskDescription,setTaskDescription] = useState("");
-    const [taskPriority,setTaskPriority] = useState("");
+    const [taskPriority,setTaskPriority] = useState(5);
     const [taskTags,setTaskTags] = useState([]);
 
 
-    const checkTask = (index,id) => {
+    const checkTask = (e,id) => {
+        e.stopPropagation()
         let newTasks = tasks;
         let idx=newTasks.findIndex(task=>task.id===id);
         newTasks[idx].status = !newTasks[idx].status;
@@ -44,7 +45,32 @@ function ListComponent(props) {
         window.location.reload();
     }
 
-    const deleteTask = (index,id) => {
+    const createTaskButton = (e) => {
+        e.stopPropagation()
+        setOpenModalID(-1);
+        setOpenModal(true);
+    }
+
+    const updateTask=(e,id)=>{
+        e.stopPropagation()
+        setOpenModalID(id);
+        let task = tasks.find(task=>task.id===id);
+        setTaskTitle(task.title);
+        setTaskDescription(task.description);
+        setTaskPriority(task.priority);
+        setTaskTags(task.tags);
+        setDate(new Date(task.deadline));
+        let val=[]
+        for(let i=0;i<folders.length;i++){
+            val.push(folders[i])
+        }
+        setFoldersList(val)
+        setOpenModalID(id);
+        setOpenModal(true);
+    }
+
+    const deleteTask = (e,id) => {
+        e.stopPropagation()
         let newTasks = tasks.filter(task => task.id !== id);
         let newFolders = folders.map(folder => {
             if(folder.content.includes(id)){
@@ -66,7 +92,7 @@ function ListComponent(props) {
         console.log(id);
         if(id===-1){
             let foo=[]
-            let newId=tasks[tasks.length-1].id+1;
+            let newId=count;
             folderList.forEach(element => {
                 foo.push(element.id);
             });
@@ -76,7 +102,7 @@ function ListComponent(props) {
             folderList.forEach(folder=>{
                 newFolders[folder.id].content.push(newId);
             });
-            setFoldersList([folders[0]]);
+            localStorage.setItem("archit-todo-count",count+1);
         }else{
             newTasks = tasks
             let foo=[]
@@ -119,28 +145,9 @@ function ListComponent(props) {
         window.location.reload();
     }
 
-    const createTaskButton = () => {
-        setOpenModalID(-1);
-        setOpenModal(true);
-    }
 
-    const updateTask=(index,id)=>{
-        setOpenModalID(id);
-        let task = tasks.find(task=>task.id===id);
-        setTaskTitle(task.title);
-        setTaskDescription(task.description);
-        setTaskPriority(task.priority);
-        setTaskTags(task.tags);
-        setDate(new Date(task.deadline));
-        let val=[]
-        for(let i=0;i<folders.length;i++){
-            val.push(folders[i])
-        }
-        setFoldersList(val)
-        setOpenModalID(id);
-        setOpenModal(true);
-    }
 
+    
 
     const modalForm = (id)=>{
         return (
@@ -201,6 +208,7 @@ function ListComponent(props) {
             </div>
         )
     }
+
     const style = {
         position: 'absolute',
         top: '50%',
@@ -220,7 +228,7 @@ function ListComponent(props) {
                     {modalForm(openModalID)}
                 </Box>
             </Modal>
-                <Accordion style={{border:"2px solid black"}} defaultExpanded={true}>
+                <Accordion style={{border:"2px solid black"}} defaultExpanded={true} >
                     <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
                         aria-controls="panel1a-content"
@@ -229,7 +237,7 @@ function ListComponent(props) {
                     >
                         <div style={{display:'flex',justifyContent:"space-between",width:"100%"}}>
                             <Typography variant='h5' fontWeight={600}>List Section</Typography>
-                            <Button variant="contained" startIcon={<AddCircleIcon />} onClick={()=>{createTaskButton()}}>
+                            <Button variant="contained" startIcon={<AddCircleIcon />} onClick={(e)=>{createTaskButton(e)}}>
                                 Create New Task
                             </Button>
                         </div>
@@ -239,7 +247,7 @@ function ListComponent(props) {
                         {
                             tasks.map((task,index)=>{
                                 return(
-                                    <Accordion expanded={expanded === task.id} onChange={handleChange(task.id)} style={{border:"2px solid black"}} defaultExpanded={true}>
+                                    <Accordion expanded={expanded === task.id} onChange={handleChange(task.id)} style={{border:"2px solid black"}}  defaultExpanded={true}>
                                         <AccordionSummary
                                             expandIcon={<ExpandMoreIcon />}
                                             aria-controls="panel1a-content"

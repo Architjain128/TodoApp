@@ -7,10 +7,24 @@ export const AppContext = createContext();
 
 function App() {
 
+  const customSort = (a, b) => {
+    if(a.status === b.status) {
+      return 0;
+    }
+    else{
+      if(a.status === false) {
+        return 1;
+      }else{
+        return -1;
+      }
+    }
+  }
+  const [count,setCount]=useState(localStorage.getItem("archit-todo-count")?parseInt(localStorage.getItem("archit-todo-count")):0);
   const [folders,setFolders]=useState(localStorage.getItem("archit-todo-folders")?JSON.parse(localStorage.getItem("archit-todo-folders")):[]);
-  const [tasks,setTasks]=useState(localStorage.getItem("archit-todo-tasks")?JSON.parse(localStorage.getItem("archit-todo-tasks")):[]);
+  const [tasks,setTasks]=useState(localStorage.getItem("archit-todo-tasks")?JSON.parse(localStorage.getItem("archit-todo-tasks")).sort(function(a,b){ if(a.status===b.status){if(a.priority===b.priority){return a.id-b.id;}else{if(a.priority<b.priority)return -1;return 1;}}else{if(a.status===false)return -1;else return 1;} } ):[]);
   const [expanded, setExpanded] = React.useState(false);
   const [selectedFolder, setSelectedFolder] = React.useState(0);
+  // const [selectedTasks, setSelectedTasks] = React.useState(folders[0].content);
 
   const handleChange = (panel) => (event, isExpanded) => {
       setExpanded(isExpanded ? panel : false);
@@ -27,7 +41,7 @@ function App() {
   }
   return (
     <div className="App">
-      <AppContext.Provider value={{folders,tasks,selectedFolder,setSelectedFolder,setFolders,setTasks,expanded,setExpanded,handleChange,dateFormat}}>
+      <AppContext.Provider value={{count,setCount,folders,tasks,selectedFolder,setSelectedFolder,setFolders,setTasks,expanded,setExpanded,handleChange,dateFormat}}>
         <TodoComponent />
       </AppContext.Provider>
     </div>

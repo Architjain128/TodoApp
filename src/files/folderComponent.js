@@ -17,8 +17,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
 import LabelImportantIcon from '@mui/icons-material/LabelImportant';
 
-const folderData = [{id:0 ,title: 'ALL', content: [0,1],createdAt:"0"},{id:1 ,title: 'Folder 1', content: [1],createdAt:1654159790029}, {id:2,title: 'Folder 2', content: [0],createdAt:1654159806519}];
-const listData=[{id:0 ,title:"List 1",description: 'des 1', status:true,priority:3,deadline:1654159806519,tags:["cs","ar"],folder:[0,1],createdAt:1654159790129},{id:1 ,title:"List 2",description: 'des 2', status:false,priority:5,deadline:1654159816519,tags:["cs2","ar2"],folder:[0,1],createdAt:1654159800519}];
+// const folderData = [{id:0 ,title: 'ALL', content: [0,1],createdAt:"0"},{id:1 ,title: 'Folder 1', content: [1],createdAt:1654159790029}, {id:2,title: 'Folder 2', content: [0],createdAt:1654159806519}];
+// const listData=[{id:0 ,title:"List 1",description: 'des 1', status:true,priority:3,deadline:1654159806519,tags:["cs","ar"],folder:[0,1],createdAt:1654159790129},{id:1 ,title:"List 2",description: 'des 2', status:false,priority:5,deadline:1654159816519,tags:["cs2","ar2"],folder:[0,1],createdAt:1654159800519}];
 
 function FolderComponent() {
     // localStorage.setItem("archit-todo-folders", JSON.stringify(folderData));
