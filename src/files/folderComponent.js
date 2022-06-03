@@ -168,7 +168,7 @@ function FolderComponent() {
             >
                 <Box sx={style}>{modalFolderForm(openFolderModalID)}</Box>
             </Modal>
-            <Accordion style={{ border: "2px solid black" }}>
+            <Accordion style={{ border: "2px solid black" }} defaultExpanded={true}>
                 <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel1a-content"
@@ -178,12 +178,24 @@ function FolderComponent() {
                         backgroundColor: "#e5e5e5",
                     }}
                 >
-                    <Typography variant="h5" fontWeight={600}>
-                        Folder Section
-                    </Typography>
+                    <div style={{display:"flex",justifyContent:"space-between",width:"100%",padding:"5px",paddingRight:"10px"}}>
+                        <Typography variant="h5" fontWeight={600}>
+                            Folder Section
+                        </Typography>
+                        <Button
+                            variant="contained"
+                            onClick={(e) => {
+                                createFolderButton(e);
+                            }}
+                            startIcon={<CreateNewFolderIcon />}
+                            
+                        >
+                            Create New Folder
+                        </Button>
+                    </div>
                 </AccordionSummary>
                 <AccordionDetails>
-                    <div style={{ display: "flex-block" }}>
+                    <div style={{ display: "flex-block", height:"150px",overflowY:"auto",padding:"5px"}}>
                         <Grid container spacing={4} style={{ marginBottom: "10px" }}>
                             {folders.map((folder, index) => {
                                 return (
@@ -306,7 +318,7 @@ function FolderComponent() {
                             })}
                         </Grid>
 
-                        <div style={{ float: "right" }}>
+                        {/* <div style={{ float: "right" }}>
                             <Button
                                 variant="contained"
                                 onClick={(e) => {
@@ -317,7 +329,7 @@ function FolderComponent() {
                             >
                                 Create New Folder
                             </Button>
-                        </div>
+                        </div> */}
                     </div>
                 </AccordionDetails>
             </Accordion>

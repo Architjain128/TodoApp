@@ -133,16 +133,6 @@ function ListComponent(props) {
             console.log(newTasks);
             console.log(newFolders);
         }
-        // setTaskTitle("");
-        // setTaskDescription("");
-        // setTaskPriority("");
-        // setTaskTags([]);
-        // setDate(new Date());
-        // setOpenModalID(-1);
-        // setTasks(newTasks);
-        // setFolders(newFolders);
-        // setFoldersList([folders[0]]);
-        // setOpenModal(false);
 
         localStorage.setItem("archit-todo-folders",JSON.stringify(newFolders));
         localStorage.setItem("archit-todo-tasks",JSON.stringify(newTasks));
@@ -242,7 +232,7 @@ function ListComponent(props) {
                         id="panel1a-header"
                         style={{borderBottom:"1px solid black",backgroundColor:"#e5e5e5"}}
                     >
-                        <div style={{display:'flex',justifyContent:"space-between",width:"100%"}}>
+                        <div style={{display:'flex',justifyContent:"space-between",width:"100%",padding:"5px",paddingRight:"10px"}}>
                             <Typography variant='h5' fontWeight={600}>List Section</Typography>
                             <Typography variant='h6' fontWeight={400}>Selected Folder : <b>{folders.find(folder=>folder.id===selectedFolder).title}</b></Typography>
                             <Button variant="contained" startIcon={<AddCircleIcon />} onClick={(e)=>{createTaskButton(e)}}>
@@ -251,73 +241,79 @@ function ListComponent(props) {
                         </div>
                     </AccordionSummary>
                     <AccordionDetails>
-                    <div style={{display:"flex-block"}}>
+                    <div style={{display:"flex-block",height:"200px",overflowY:"auto",padding:"5px"}}>
                         {
-                            selectedTasks.map((task,index)=>{
-                                return(
-                                    <Accordion expanded={expanded === task.id} onChange={handleChange(task.id)} style={{border:"2px solid black"}}  defaultExpanded={true}>
-                                        <AccordionSummary
-                                            expandIcon={<ExpandMoreIcon />}
-                                            aria-controls="panel1a-content"
-                                            id="panel1a-header"
-                                            style={{borderBottom:"1px solid black",backgroundColor:"#f5f5f5"}}
-                                            m={0}
-                                            
-                                        >
-                                            <div style={{display:"flex",justifyContent:"space-between",width:"100%"}}>
-                                                <div style={{display:"flex",justifyContent:"left"}}>
-                                                    <Checkbox  checked={task.status} onClick={(e)=>{checkTask(e,task.id)}}/>
-                                                    <Typography component="div" variant="h6" pt={1}>
-                                                        {task.title}
-                                                    </Typography>
-                                                </div >
-                                                <div >
-                                                    <IconButton aria-label="Edit" style={{height:"100%"}} onClick={(index)=>{updateTask(index,task.id)}}>
-                                                        <EditIcon sx={{height:30,width:30}}/>
-                                                    </IconButton>
-                                                    <IconButton aria-label="Delete" style={{height:"100%"}} onClick={(index)=>{deleteTask(index,task.id)}}>
-                                                        <DeleteIcon sx={{height:30,width:30}}/>
-                                                    </IconButton>
-                                                </div>
-                                            </div>
-                                        </AccordionSummary>
-                                        <AccordionDetails>
-                                            <Box sx={{ display: 'flex',justifyContent:"space-between"}} >
-                                                <div style={{ width:"100%"}}>
-                                                    <Box sx={{ textAlign:"left",border:"1px solid grey", borderRadius:"5px", width:"100%",height:"100%"}}>
-                                                        <Typography component="div" variant="body2" m={1}>
-                                                            {task.description}
+                            selectedTasks.length>0?
+                            
+                                selectedTasks.map((task,index)=>{
+                                    return(
+                                        <Accordion expanded={expanded === task.id} onChange={handleChange(task.id)} style={{border:"2px solid black"}}  defaultExpanded={true}>
+                                            <AccordionSummary
+                                                expandIcon={<ExpandMoreIcon />}
+                                                aria-controls="panel1a-content"
+                                                id="panel1a-header"
+                                                style={{borderBottom:"1px solid black",backgroundColor:"#f5f5f5"}}
+                                                m={0}
+                                                
+                                            >
+                                                <div style={{display:"flex",justifyContent:"space-between",width:"100%"}}>
+                                                    <div style={{display:"flex",justifyContent:"left"}}>
+                                                        <Checkbox  checked={task.status} onClick={(e)=>{checkTask(e,task.id)}}/>
+                                                        <Typography component="div" variant="h6" pt={1}>
+                                                            {task.title}
                                                         </Typography>
-                                                    </Box>
+                                                    </div >
+                                                    <div >
+                                                        <IconButton aria-label="Edit" style={{height:"100%"}} onClick={(index)=>{updateTask(index,task.id)}}>
+                                                            <EditIcon sx={{height:30,width:30}}/>
+                                                        </IconButton>
+                                                        <IconButton aria-label="Delete" style={{height:"100%"}} onClick={(index)=>{deleteTask(index,task.id)}}>
+                                                            <DeleteIcon sx={{height:30,width:30}}/>
+                                                        </IconButton>
+                                                    </div>
                                                 </div>
-                                                <div style={{ width:"170px"}}>
-                                                    <Box direction="row" spacing={1} p={1}>
-                                                        <Chip key={index} label={"Priority: "+task.priority} variant="outlined" color="warning" size="small" />
-                                                        {
-                                                            task.tags.map((tag,index)=>{
-                                                                return(
-                                                                    tag!==" " && <Chip key={index} label={tag} variant="outlined" color="success" size="small" />
-                                                                )
-                                                            })
-                                                        }
-                                                    </Box>
-                                                    <Box pl={2} style={{display:"flex", textAlign:"left",justifyContent:"space-between"}}>
-                                                        <div>
-                                                            <Typography variant="caption" color="text.secondary" component="div">
-                                                                <b>Deadline</b><br/> {dateFormat(task.deadline)}
+                                            </AccordionSummary>
+                                            <AccordionDetails>
+                                                <Box sx={{ display: 'flex',justifyContent:"space-between"}} >
+                                                    <div style={{ width:"100%"}}>
+                                                        <Box sx={{ textAlign:"left",border:"1px solid grey", borderRadius:"5px", width:"100%",height:"100%"}}>
+                                                            <Typography component="div" variant="body2" m={1}>
+                                                                {task.description}
                                                             </Typography>
-                                                            <Typography variant="caption" color="text.secondary" component="div">
-                                                                <b>Created On</b><br/>{dateFormat(task.createdAt)}
-                                                            </Typography>
-                                                        </div>
-                                                    </Box>
-                                                </div>
-                                            </Box>
-                                            
-                                        </AccordionDetails>
-                                    </Accordion>
-                                )
-                            })
+                                                        </Box>
+                                                    </div>
+                                                    <div style={{ width:"170px"}}>
+                                                        <Box direction="row" spacing={1} p={1}>
+                                                            <Chip key={index} label={"Priority: "+task.priority} variant="outlined" color="warning" size="small" />
+                                                            {
+                                                                task.tags.map((tag,index)=>{
+                                                                    return(
+                                                                        tag!==" " && <Chip key={index} label={tag} variant="outlined" color="success" size="small" />
+                                                                    )
+                                                                })
+                                                            }
+                                                        </Box>
+                                                        <Box pl={2} style={{display:"flex", textAlign:"left",justifyContent:"space-between"}}>
+                                                            <div>
+                                                                <Typography variant="caption" color="text.secondary" component="div">
+                                                                    <b>Deadline</b><br/> {dateFormat(task.deadline)}
+                                                                </Typography>
+                                                                <Typography variant="caption" color="text.secondary" component="div">
+                                                                    <b>Created On</b><br/>{dateFormat(task.createdAt)}
+                                                                </Typography>
+                                                            </div>
+                                                        </Box>
+                                                    </div>
+                                                </Box>
+                                                
+                                            </AccordionDetails>
+                                        </Accordion>
+                                    )
+                                })
+                            :
+                            <div class="center">
+                                <Typography variant="h6" color="text.primary" component="div">No Tasks Found</Typography>
+                            </div>
                         }
                     </div>
                     </AccordionDetails>
