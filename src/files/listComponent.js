@@ -24,7 +24,7 @@ import DateTimePicker from 'react-datetime-picker';
 
 function ListComponent(props) {
     // localStorage.setItem("archit-todo-tasks",JSON.stringify(listData));
-    const {count,setCount,tasks,folders,setTasks,setFolders,expanded,handleChange,dateFormat} = useContext(AppContext);
+    const {count,setCount,tasks,folders,setTasks,setFolders,selectedFolder,setSelectedFolder,expanded,handleChange,dateFormat} = useContext(AppContext);
     const [openModal,setOpenModal] = useState(false);
     const [openModalID,setOpenModalID] = useState(-1);
     const [date,setDate] = useState(new Date());
@@ -33,7 +33,7 @@ function ListComponent(props) {
     const [taskDescription,setTaskDescription] = useState("");
     const [taskPriority,setTaskPriority] = useState(5);
     const [taskTags,setTaskTags] = useState([]);
-
+    const [selectedTasks,setSelectedTasks] = useState(tasks.filter(task=>folders.find(folder=>folder.id===selectedFolder).content.includes(task.id)));
 
     const checkTask = (e,id) => {
         e.stopPropagation()
@@ -100,7 +100,8 @@ function ListComponent(props) {
             newFolders=folders;
             newTasks.push({id:newId,title:taskTitle,description:taskDescription,status:false,priority:taskPriority,tags:taskTags,deadline:date.getTime(),folder:foo,createdAt:new Date().getTime()});
             folderList.forEach(folder=>{
-                newFolders[folder.id].content.push(newId);
+                let idx=newFolders.findIndex(f=>f.id===folder.id);
+                newFolders[idx].content.push(newId);
             });
             localStorage.setItem("archit-todo-count",count+1);
         }else{
@@ -120,10 +121,13 @@ function ListComponent(props) {
             newFolders=folders;
             let prevFolder = tasks[idx].folder;
             prevFolder.forEach(folder=>{
-                newFolders[folder].content = newFolders[folder].content.filter(task=>task!==id);
+                let idx=newFolders.findIndex(f=>f.id===folder);
+                newFolders[idx].content = newFolders[idx].content.filter(task=>task!==id);
             });
             folderList.forEach(folder=>{
-                newFolders[folder.id].content.push(id);
+                let idx=newFolders.findIndex(f=>f.id===folder.id);
+                newFolders[idx].content.push(id);
+                // newFolders[folder.id].content.push(id).;
             });
 
             console.log(newTasks);
@@ -153,6 +157,9 @@ function ListComponent(props) {
         return (
             <div class="form">
                 <Grid container spacing={4}>
+                    <Grid item xs={12}>
+                        <Typography variant="h6" align='center' gutterBottom>{id===-1?<b>Create Task</b>:<b>Update Task</b>}</Typography>
+                    </Grid>
                     <Grid item xs={12}>
                         <TextField id="standard-basic" label="Title" fullWidth required defaultValue={taskTitle} onChange={(e)=>{const {value} = e.target;setTaskTitle(value);}}/>
                     </Grid>
@@ -237,6 +244,7 @@ function ListComponent(props) {
                     >
                         <div style={{display:'flex',justifyContent:"space-between",width:"100%"}}>
                             <Typography variant='h5' fontWeight={600}>List Section</Typography>
+                            <Typography variant='h6' fontWeight={400}>Selected Folder : <b>{folders.find(folder=>folder.id===selectedFolder).title}</b></Typography>
                             <Button variant="contained" startIcon={<AddCircleIcon />} onClick={(e)=>{createTaskButton(e)}}>
                                 Create New Task
                             </Button>
@@ -245,7 +253,7 @@ function ListComponent(props) {
                     <AccordionDetails>
                     <div style={{display:"flex-block"}}>
                         {
-                            tasks.map((task,index)=>{
+                            selectedTasks.map((task,index)=>{
                                 return(
                                     <Accordion expanded={expanded === task.id} onChange={handleChange(task.id)} style={{border:"2px solid black"}}  defaultExpanded={true}>
                                         <AccordionSummary
