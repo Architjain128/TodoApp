@@ -7,7 +7,7 @@ import { AppContext } from "../App";
 function TodoComponent() {
     return (
             <Container  maxWidth="lg">
-                <h1>Todo App</h1>
+                <h1>TODO APP</h1>
                 <div>
                     <FolderComponent />
                     <hr/>
